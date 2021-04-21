@@ -15,19 +15,32 @@ class _BuilderBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.only(left: 16),
+      width: double.infinity,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 16),
-          Text("Listado de Pokémon"),
+          Text(
+            "Listado de Pokémon",
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          ),
           Divider(),
           TextField(
             autofocus: true,
             keyboardType: TextInputType.text,
             decoration: InputDecoration(hintText: "Buscar"),
           ),
-          _BuilderButton(text: "Anterior", onTap: () {}),
-          _BuilderButton(text: "Siguiente", onTap: () {}),
-          _BuilderListView(),
+          SizedBox(height: 16),
+          Row(
+            children: [
+              _BuilderButton(text: "<- Anterior ", onPressed: () {}),
+              SizedBox(height: 16),
+              _BuilderButton(text: "Siguiente ->", onPressed: () {}),
+            ],
+          ),
+          SizedBox(height: 16),
+          Expanded(child: _BuilderListView()),
         ],
       ),
     );
@@ -36,40 +49,31 @@ class _BuilderBody extends StatelessWidget {
 
 class _BuilderButton extends StatelessWidget {
   final String text;
-  final GestureTapCallback onTap;
+  final VoidCallback onPressed;
 
-  const _BuilderButton({Key? key, required this.text, required this.onTap})
+  const _BuilderButton({Key? key, required this.text, required this.onPressed})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: this.onTap,
-      child: Container(
-        color: Colors.blue,
-        width: 100,
-        height: 50,
-        child: Text(this.text),
-      ),
-    );
+    return TextButton(onPressed: this.onPressed, child: Text(this.text));
   }
 }
 
 class _BuilderListView extends StatelessWidget {
   final controller = Get.put(PokemonController());
-
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => ListView.builder(
-        itemBuilder: (_, index) => ListTile(
-            title: Row(
-          children: [
-            Text(controller.pokemonResp[index].id),
-            Expanded(child: Text(controller.pokemonResp[index].name)),
-          ],
-        )),
-      ),
-    );
+    return GetBuilder<PokemonController>(
+        builder: (controller) => ListView.builder(
+            itemCount: controller.pokemonResp.length,
+            itemBuilder: (_, i) => ListTile(
+                  title: Row(
+                    children: [
+                      Text(""),
+                      Text(controller.pokemonResp[i].name),
+                    ],
+                  ),
+                )));
   }
 }
