@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:poke_filter_api/pokemon/controller/pokemon_controller.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -25,6 +27,7 @@ class _BuilderBody extends StatelessWidget {
           ),
           _BuilderButton(text: "Anterior", onTap: () {}),
           _BuilderButton(text: "Siguiente", onTap: () {}),
+          _BuilderListView(),
         ],
       ),
     );
@@ -53,10 +56,20 @@ class _BuilderButton extends StatelessWidget {
 }
 
 class _BuilderListView extends StatelessWidget {
+  final controller = Get.put(PokemonController());
+
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemBuilder: (_, index) => ListTile(),
+    return Obx(
+      () => ListView.builder(
+        itemBuilder: (_, index) => ListTile(
+            title: Row(
+          children: [
+            Text(controller.pokemonResp[index].id),
+            Expanded(child: Text(controller.pokemonResp[index].name)),
+          ],
+        )),
+      ),
     );
   }
 }
