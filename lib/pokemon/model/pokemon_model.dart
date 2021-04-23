@@ -1,11 +1,19 @@
-class PokemonModel {
-  String id;
+class PokemoModel {
+  PokemoModel({
+    required this.name,
+    required this.url,
+  });
+
   String name;
-  String imageUrl;
+  String url;
 
-  PokemonModel(this.id, this.name, this.imageUrl);
+  factory PokemoModel.fromMap(Map<String, dynamic> json) => PokemoModel(
+        name: json["name"],
+        url: json["url"],
+      );
 
-  static fromJson(data) {
-    return PokemonModel(data["name"], data["url"], data["url"]);
-  }
+  Map<String, dynamic> toMap() => {
+        "name": name,
+        "url": url,
+      };
 }

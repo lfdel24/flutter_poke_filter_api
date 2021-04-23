@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:poke_filter_api/pokemon/controller/pokemon_controller.dart';
+import 'package:poke_filter_api/pokemon/model/pokemon_model.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -60,20 +60,33 @@ class _BuilderButton extends StatelessWidget {
   }
 }
 
-class _BuilderListView extends StatelessWidget {
-  final controller = Get.put(PokemonController());
+class _BuilderListView extends StatefulWidget {
+  @override
+  __BuilderListViewState createState() => __BuilderListViewState();
+}
+
+class __BuilderListViewState extends State<_BuilderListView> {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<PokemonController>(
-        builder: (controller) => ListView.builder(
-            itemCount: controller.pokemonResp.length,
-            itemBuilder: (_, i) => ListTile(
-                  title: Row(
-                    children: [
-                      Text(""),
-                      Text(controller.pokemonResp[i].name),
-                    ],
-                  ),
-                )));
+    return FutureBuilder(
+        future: PokemonController().getAll(),
+        builder: (_, AsyncSnapshot<List<PokemoModel>> snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (_, i) => ListTile(
+                      title: Row(
+                        children: [
+                          Text(snapshot.data![i].name),
+                        ],
+                      ),
+                    ));
+          } else if (snapshot.hasError) {
+            //Text(snapshot.error.toString());
+          }
+          return Center(
+              child: Container(
+                  width: 100, height: 100, child: CircularProgressIndicator()));
+        });
   }
 }
