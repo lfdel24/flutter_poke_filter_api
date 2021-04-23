@@ -6,15 +6,14 @@ import 'package:poke_filter_api/pokemon/model/pokemon_model.dart';
 class PokemonService {
   String _url = "https://pokeapi.co/api/v2";
 
-  Future<List<PokemoModel>> getAll() async {
+  Future<List<PokemonModel>> getAll() async {
     var url = Uri.parse('${this._url}/pokemon?limit=1500');
     var response = await http.get(url);
-    var list = json.decode(response.body)['results'];
-    List<PokemoModel> listPokemon = [];
-    for (var item in list) {
-      print(item['name'] + item['url']);
-      listPokemon.add(PokemoModel.fromMap(item));
+    var results = json.decode(response.body)['results'];
+    List<PokemonModel> list = [];
+    for (var result in results) {
+      list.add(PokemonModel.fromMap(result));
     }
-    return listPokemon;
+    return list;
   }
 }

@@ -34,12 +34,12 @@ class _BuilderBody extends StatelessWidget {
           SizedBox(height: 16),
           Row(
             children: [
-              _BuilderButton(text: "<- Anterior ", onPressed: () {}),
-              SizedBox(height: 16),
-              _BuilderButton(text: "Siguiente ->", onPressed: () {}),
+              _BuilderButton(text: "Anterior", onPressed: () {}),
+              SizedBox(height: 20),
+              _BuilderButton(text: "Siguiente", onPressed: () {}),
             ],
           ),
-          SizedBox(height: 16),
+          SizedBox(height: 10),
           Expanded(child: _BuilderListView()),
         ],
       ),
@@ -56,7 +56,13 @@ class _BuilderButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(onPressed: this.onPressed, child: Text(this.text));
+    return TextButton(
+      style: TextButton.styleFrom(
+        primary: Colors.blue,
+      ),
+      onPressed: this.onPressed,
+      child: Text(this.text),
+    );
   }
 }
 
@@ -70,16 +76,35 @@ class __BuilderListViewState extends State<_BuilderListView> {
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: PokemonController().getAll(),
-        builder: (_, AsyncSnapshot<List<PokemoModel>> snapshot) {
+        builder: (_, AsyncSnapshot<List<PokemonModel>> snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
                 itemCount: snapshot.data!.length,
-                itemBuilder: (_, i) => ListTile(
-                      title: Row(
-                        children: [
-                          Text(snapshot.data![i].name),
-                        ],
-                      ),
+                itemBuilder: (_, i) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          snapshot.data![i].name,
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        SizedBox(width: 10),
+                        Image.network(snapshot.data![i].url,
+                            fit: BoxFit.cover,
+                            alignment: Alignment.centerRight,
+                            height: 100,
+                            width: 100, loadingBuilder: (context, Widget child,
+                                ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                              child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
+                          ));
+                        }),
+                        Divider()
+                      ],
                     ));
           } else if (snapshot.hasError) {
             //Text(snapshot.error.toString());

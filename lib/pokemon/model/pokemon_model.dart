@@ -1,5 +1,5 @@
-class PokemoModel {
-  PokemoModel({
+class PokemonModel {
+  PokemonModel({
     required this.name,
     required this.url,
   });
@@ -7,10 +7,16 @@ class PokemoModel {
   String name;
   String url;
 
-  factory PokemoModel.fromMap(Map<String, dynamic> json) => PokemoModel(
-        name: json["name"],
-        url: json["url"],
-      );
+  factory PokemonModel.fromMap(Map<String, dynamic> json) {
+    var urlArr = json["url"].split('/');
+    var id = urlArr[6];
+    var imageUrl =
+        'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png';
+    return PokemonModel(
+      name: json["name"],
+      url: imageUrl,
+    );
+  }
 
   Map<String, dynamic> toMap() => {
         "name": name,
