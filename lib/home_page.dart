@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:poke_filter_api/my_progress_indicator.dart';
 import 'package:poke_filter_api/pokemon/controller/pokemon_controller.dart';
@@ -13,8 +15,14 @@ class HomePage extends StatelessWidget {
 }
 
 class _BuilderBody extends StatelessWidget {
+  //
+  final controller = PokemonController();
+
   @override
   Widget build(BuildContext context) {
+    //
+    this.controller.load();
+
     return Container(
       padding: EdgeInsets.only(left: 16),
       width: double.infinity,
@@ -31,6 +39,11 @@ class _BuilderBody extends StatelessWidget {
             autofocus: true,
             keyboardType: TextInputType.text,
             decoration: InputDecoration(hintText: "Buscar"),
+            onChanged: (value) {
+              Timer(Duration(milliseconds: 1000), () {
+                this.controller.filterPokemon(value);
+              });
+            },
           ),
           SizedBox(height: 16),
           Row(
@@ -41,7 +54,10 @@ class _BuilderBody extends StatelessWidget {
             ],
           ),
           SizedBox(height: 10),
-          Expanded(child: _BuilderListView()),
+          Expanded(
+              child: _BuilderListView(
+            controller: this.controller,
+          )),
         ],
       ),
     );
@@ -67,25 +83,16 @@ class _BuilderButton extends StatelessWidget {
   }
 }
 
-class _BuilderListView extends StatefulWidget {
-  @override
-  __BuilderListViewState createState() => __BuilderListViewState();
-}
+class _BuilderListView extends StatelessWidget {
+  final PokemonController controller;
 
-class __BuilderListViewState extends State<_BuilderListView> {
-  //
-  final controller = PokemonController();
-
-  @override
-  void initState() {
-    super.initState();
-    this.controller.init();
-  }
+  const _BuilderListView({Key? key, required this.controller})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-        valueListenable: this.controller.listenable,
+        valueListenable: this.controller.pokemonsCopy,
         builder: (_, List<PokemonModel> listPokemon, __) => ListView.builder(
               itemCount: listPokemon.length,
               itemBuilder: (_, i) => this.controller.ready.value
