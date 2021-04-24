@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:poke_filter_api/my_progress_indicator.dart';
 import 'package:poke_filter_api/pokemon/controller/pokemon_controller.dart';
 import 'package:poke_filter_api/pokemon/model/pokemon_model.dart';
 
@@ -72,46 +73,40 @@ class _BuilderListView extends StatefulWidget {
 }
 
 class __BuilderListViewState extends State<_BuilderListView> {
+  //
+  final controller = PokemonController();
+
+  @override
+  void initState() {
+    super.initState();
+    this.controller.init();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: PokemonController().getAll(),
-        builder: (_, AsyncSnapshot<List<PokemonModel>> snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (_, i) => Column(
+    return ValueListenableBuilder(
+        valueListenable: this.controller.listenable,
+        builder: (_, List<PokemonModel> listPokemon, __) => ListView.builder(
+              itemCount: listPokemon.length,
+              itemBuilder: (_, i) => this.controller.ready.value
+                  ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          snapshot.data![i].name,
+                          "#${i + 1} ${listPokemon[i].name}",
                           style: TextStyle(fontWeight: FontWeight.w600),
                         ),
                         SizedBox(width: 10),
-                        Image.network(snapshot.data![i].url,
-                            fit: BoxFit.cover,
-                            alignment: Alignment.centerRight,
-                            height: 100,
-                            width: 100, loadingBuilder: (context, Widget child,
+                        Image.network(listPokemon[i].url, fit: BoxFit.cover,
+                            loadingBuilder: (_, Widget child,
                                 ImageChunkEvent? loadingProgress) {
                           if (loadingProgress == null) return child;
-                          return Center(
-                              child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null,
-                          ));
+                          return MyProgressIndicator();
                         }),
                         Divider()
                       ],
-                    ));
-          } else if (snapshot.hasError) {
-            //Text(snapshot.error.toString());
-          }
-          return Center(
-              child: Container(
-                  width: 100, height: 100, child: CircularProgressIndicator()));
-        });
+                    )
+                  : MyProgressIndicator(),
+            ));
   }
 }
