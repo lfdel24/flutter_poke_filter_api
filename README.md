@@ -1,6 +1,8 @@
 # poke_filter_api
 
-A new Flutter project.
+Flutter Pokémon app.
+
+https://lfdel24.github.io/flutter_poke_filter_api/build/web/index#/
 
 ## Getting Started
 
