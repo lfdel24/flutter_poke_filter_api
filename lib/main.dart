@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Pokémos | lfdel24@gmail.com',
+      title: 'Flutter Pokémon | lfdel24@gmail.com',
       theme: ThemeData(
         // This is the theme of your application.
         //

@@ -57256,7 +57256,7 @@ $C:"$3",
 $R:3,
 $S:348}
 F.BP.prototype={
-X:function(a,b){return new S.t6(new X.B_(null),"Flutter Pok\xe9mos | lfdel24@gmail.com",X.acf(null,C.qW),null)}}
+X:function(a,b){return new S.t6(new X.B_(null),"Flutter Pok\xe9mon | lfdel24@gmail.com",X.acf(null,C.qW),null)}}
 X.tl.prototype={
 X:function(a,b){var s=null
 return T.Nj(M.kI(s,new U.qE(s,s,s,s,s,s),s,s,s,40,s,new V.b0(8,8,8,8),40),s,s)}}
