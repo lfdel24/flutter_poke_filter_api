@@ -34,26 +34,30 @@ class _BuilderBody extends StatelessWidget {
             "Listado de Pokémon",
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
-          Divider(),
           TextField(
-            autofocus: true,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(hintText: "Buscar"),
-            onChanged: (value) {
-              Timer(Duration(milliseconds: 1000), () {
-                this.controller.filterPokemon(value);
-              });
-            },
-          ),
+              autofocus: true,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(hintText: "Buscar"),
+              onChanged: (value) {
+                Timer(Duration(milliseconds: 750), () {
+                  this.controller.filterPokemon(value);
+                });
+              }),
+          SizedBox(height: 4),
+          ValueListenableBuilder(
+              valueListenable: this.controller.pokemonsCopy,
+              builder: (_, List<PokemonModel> list, widget) {
+                return Text('${list.length} pokémon encontrados');
+              }),
           SizedBox(height: 16),
-          Row(
-            children: [
-              _BuilderButton(text: "Anterior", onPressed: () {}),
-              SizedBox(height: 20),
-              _BuilderButton(text: "Siguiente", onPressed: () {}),
-            ],
-          ),
-          SizedBox(height: 10),
+          // Row(
+          //   children: [
+          //     _BuilderButton(text: "Anterior", onPressed: () {}),
+          //     SizedBox(height: 20),
+          //     _BuilderButton(text: "Siguiente", onPressed: () {}),
+          //   ],
+          // ),
+          // SizedBox(height: 10),
           Expanded(
               child: _BuilderListView(
             controller: this.controller,
@@ -101,12 +105,12 @@ class _BuilderListView extends StatelessWidget {
                       children: [
                         Text(
                           "#${i + 1} ${listPokemon[i].name}",
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                         SizedBox(width: 10),
                         Image.network(listPokemon[i].url, fit: BoxFit.cover,
-                            loadingBuilder: (_, Widget child,
-                                ImageChunkEvent? loadingProgress) {
+                            loadingBuilder: (_, child, loadingProgress) {
                           if (loadingProgress == null) return child;
                           return MyProgressIndicator();
                         }),
