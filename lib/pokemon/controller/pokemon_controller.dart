@@ -16,6 +16,7 @@ class PokemonController {
     this.ready.value = false;
     this._pokemons.addAll(await service.getList());
     this.pokemonsCopy.value = this._pokemons;
+    print("Data ${this._pokemons.length}");
     this.ready.value = true;
   }
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:poke_filter_api/home_page.dart';
+import 'package:poke_filter_api/pokemon/pages/pokemon_page.dart';
+import 'package:poke_filter_api/pokemon/controller/pokemon_controller.dart';
+import 'package:poke_filter_api/pokemon/inherited_widget/my_inherited_widget.dart';
 
 void main() {
   runApp(MyApp());
@@ -24,7 +26,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       //home: MyHomePage(title: 'Flutter Demo Home Page'),
-      home: HomePage(),
+      home:
+          MyInheritedWidget(child: HomePage(), controller: PokemonController()),
     );
   }
 }
